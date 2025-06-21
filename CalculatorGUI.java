@@ -2,211 +2,215 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-class CalculatorGUI extends JFrame implements ActionListener
-{
-    JTextField textField;
-    JTextField resultField;
-    JButton[] numberButtons = new JButton[10];
-    JButton addButton, subButton, mulButton, divButton, eqButton, clrButton, delButton;
-    JButton dotButton, percentButton, powerButton, sqrtButton;
+public class CalculatorGUI extends JFrame implements ActionListener, KeyListener {
+
+    JTextField expressionField, resultField;
     JPanel panel;
 
-    double num1 = 0, num2 = 0, result = 0;
-    char operator;
+    StringBuilder expression = new StringBuilder();
 
-    CalculatorGUI()
-    {
-        this.setTitle("Advanced Calculator");
-        this.setSize(420, 700);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setLayout(null);
+    public CalculatorGUI() {
+        setTitle("Smart Calculator");
+        setSize(420, 700);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(null);
+        setResizable(false);
 
-        textField = new JTextField();
-        textField.setBounds(30, 30, 340, 40);
-        textField.setFont(new Font("Arial", Font.PLAIN, 20));
-        textField.setEditable(false);
-        this.add(textField);
+        // Expression Field
+        expressionField = new JTextField();
+        expressionField.setBounds(30, 30, 340, 40);
+        expressionField.setFont(new Font("Arial", Font.PLAIN, 20));
+        expressionField.setEditable(false);
+        add(expressionField);
 
+        // Result Field
         resultField = new JTextField();
         resultField.setBounds(30, 80, 340, 40);
         resultField.setFont(new Font("Arial", Font.BOLD, 24));
         resultField.setEditable(false);
         resultField.setHorizontalAlignment(JTextField.RIGHT);
-        this.add(resultField);
+        add(resultField);
 
-        for (int i = 0; i < 10; i++)
-        {
-            numberButtons[i] = new JButton(String.valueOf(i));
-            numberButtons[i].setFont(new Font("Arial", Font.BOLD, 20));
-            numberButtons[i].addActionListener(this);
-        }
-
-        clrButton = new JButton("C");
-        delButton = new JButton("DEL");
-        divButton = new JButton("/");
-        mulButton = new JButton("*");
-        subButton = new JButton("-");
-        addButton = new JButton("+");
-        eqButton = new JButton("=");
-        dotButton = new JButton(".");
-        percentButton = new JButton("%");
-        powerButton = new JButton("^");
-        sqrtButton = new JButton("√");
-
-        JButton[] functionButtons =
-        {
-            clrButton, delButton, divButton, mulButton,
-            subButton, addButton, eqButton,
-            dotButton, percentButton, powerButton, sqrtButton
+        // Buttons
+        String[] buttons = {
+                "C", "DEL", "%", "/",
+                "7", "8", "9", "*",
+                "4", "5", "6", "-",
+                "1", "2", "3", "+",
+                ".", "0", "√", "="
         };
-
-        for (JButton btn : functionButtons)
-        {
-            btn.setFont(new Font("Arial", Font.BOLD, 20));
-            btn.addActionListener(this);
-        }
 
         panel = new JPanel();
         panel.setBounds(30, 140, 340, 450);
         panel.setLayout(new GridLayout(5, 4, 10, 10));
+        for (String text : buttons) {
+            JButton btn = new JButton(text);
+            btn.setFont(new Font("Arial", Font.BOLD, 20));
+            btn.addActionListener(this);
+            panel.add(btn);
+        }
 
-        panel.add(clrButton);
-        panel.add(delButton);
-        panel.add(sqrtButton);
-        panel.add(percentButton);
-
-        panel.add(numberButtons[7]);
-        panel.add(numberButtons[8]);
-        panel.add(numberButtons[9]);
-        panel.add(divButton);
-
-        panel.add(numberButtons[4]);
-        panel.add(numberButtons[5]);
-        panel.add(numberButtons[6]);
-        panel.add(mulButton);
-
-        panel.add(numberButtons[1]);
-        panel.add(numberButtons[2]);
-        panel.add(numberButtons[3]);
-        panel.add(subButton);
-
-        panel.add(dotButton);
-        panel.add(numberButtons[0]);
-        panel.add(powerButton);
-        panel.add(addButton);
-
-        eqButton.setBounds(30, 600, 340, 40);
-        this.add(eqButton);
-
-        this.add(panel);
-        this.setVisible(true);
-    }
-
-    public static void main(String[] args)
-    {
-        new CalculatorGUI();
+        add(panel);
+        setFocusable(true);
+        addKeyListener(this);
+        setVisible(true);
     }
 
     @Override
-    public void actionPerformed(ActionEvent e)
-    {
-        Object src = e.getSource();
+    public void actionPerformed(ActionEvent e) {
+        String cmd = e.getActionCommand();
 
-        for (int i = 0; i < 10; i++) {
-            if (src == numberButtons[i]) {
-                textField.setText(textField.getText() + i);
-                return;
+        switch (cmd) {
+            case "=" -> evaluate();
+            case "C" -> {
+                expression.setLength(0);
+                expressionField.setText("");
+                resultField.setText("");
             }
-        }
-
-        if (src == dotButton) {
-            textField.setText(textField.getText() + ".");
-        } else if (src == clrButton) {
-            textField.setText("");
-            resultField.setText("");
-        } else if (src == delButton) {
-            String text = textField.getText();
-            if (!text.isEmpty()) {
-                textField.setText(text.substring(0, text.length() - 1));
+            case "DEL" -> {
+                if (expression.length() > 0) {
+                    expression.deleteCharAt(expression.length() - 1);
+                    expressionField.setText(expression.toString());
+                }
             }
-        } else if (src == addButton) {
-            textField.setText(textField.getText() + " + ");
-        } else if (src == subButton) {
-            textField.setText(textField.getText() + " - ");
-        } else if (src == mulButton) {
-            textField.setText(textField.getText() + " * ");
-        } else if (src == divButton) {
-            textField.setText(textField.getText() + " / ");
-        } else if (src == percentButton) {
-            textField.setText(textField.getText() + " % ");
-        } else if (src == powerButton) {
-            textField.setText(textField.getText() + " ^ ");
-        } else if (src == sqrtButton) {
-            textField.setText(textField.getText() + " √ ");
-        } else if (src == eqButton) {
-            evaluateExpression();
+            case "√" -> {
+                try {
+                    double value = Double.parseDouble(expression.toString());
+                    double result = Math.sqrt(value);
+                    resultField.setText(String.valueOf(result));
+                    expression.setLength(0);
+                    expression.append(result);
+                    expressionField.setText(expression.toString());
+                } catch (Exception ex) {
+                    resultField.setText("Error");
+                }
+            }
+            case "%" -> {
+                expression.append("/100");
+                expressionField.setText(expression.toString());
+            }
+            default -> {
+                expression.append(cmd);
+                expressionField.setText(expression.toString());
+            }
         }
     }
 
-    void evaluateExpression()
-    {
+    void evaluate() {
         try {
-            String expr = textField.getText().trim();
-            String[] tokens = expr.split(" ");
-
-            if (tokens.length == 1 && tokens[0].startsWith("√")) {
-                double num = Double.parseDouble(tokens[0].substring(1));
-                resultField.setText(String.valueOf(Math.sqrt(num)));
-                return;
-            }
-
-            if (tokens.length == 2 && tokens[0].equals("√")) {
-                double num = Double.parseDouble(tokens[1]);
-                resultField.setText(String.valueOf(Math.sqrt(num)));
-                return;
-            }
-
-            if (tokens.length != 3) {
-                resultField.setText("Invalid");
-                return;
-            }
-
-            double a = Double.parseDouble(tokens[0]);
-            String op = tokens[1];
-            double b = Double.parseDouble(tokens[2]);
-
-            switch (op) {
-                case "+":
-                    result = a + b;
-                    break;
-                case "-":
-                    result = a - b;
-                    break;
-                case "*":
-                    result = a * b;
-                    break;
-                case "/":
-                    if (b == 0) {
-                        resultField.setText("Error");
-                        return;
-                    }
-                    result = a / b;
-                    break;
-                case "%":
-                    result = a % b;
-                    break;
-                case "^":
-                    result = Math.pow(a, b);
-                    break;
-                default:
-                    resultField.setText("Unknown Op");
-                    return;
-            }
-
+            double result = eval(expression.toString());
             resultField.setText(String.valueOf(result));
-
+            expression.setLength(0);
+            expression.append(result);
+            expressionField.setText(expression.toString());
         } catch (Exception ex) {
             resultField.setText("Error");
         }
+    }
+
+    // Simple expression evaluator
+    public double eval(String expr) {
+        return new Object() {
+            int pos = -1, ch;
+
+            void nextChar() {
+                ch = (++pos < expr.length()) ? expr.charAt(pos) : -1;
+            }
+
+            boolean eat(int charToEat) {
+                while (ch == ' ') nextChar();
+                if (ch == charToEat) {
+                    nextChar();
+                    return true;
+                }
+                return false;
+            }
+
+            double parse() {
+                nextChar();
+                double x = parseExpression();
+                if (pos < expr.length()) throw new RuntimeException("Unexpected: " + (char) ch);
+                return x;
+            }
+
+            double parseExpression() {
+                double x = parseTerm();
+                while (true) {
+                    if (eat('+')) x += parseTerm();
+                    else if (eat('-')) x -= parseTerm();
+                    else return x;
+                }
+            }
+
+            double parseTerm() {
+                double x = parseFactor();
+                while (true) {
+                    if (eat('*')) x *= parseFactor();
+                    else if (eat('/')) x /= parseFactor();
+                    else return x;
+                }
+            }
+
+            double parseFactor() {
+                if (eat('+')) return parseFactor();
+                if (eat('-')) return -parseFactor();
+
+                double x;
+                int startPos = this.pos;
+
+                if (eat('(')) {
+                    x = parseExpression();
+                    eat(')');
+                } else if ((ch >= '0' && ch <= '9') || ch == '.') {
+                    while ((ch >= '0' && ch <= '9') || ch == '.') nextChar();
+                    x = Double.parseDouble(expr.substring(startPos, this.pos));
+                } else {
+                    throw new RuntimeException("Unexpected: " + (char) ch);
+                }
+
+                if (eat('^')) x = Math.pow(x, parseFactor());
+
+                return x;
+            }
+        }.parse();
+    }
+
+    // Keyboard Support
+    @Override public void keyTyped(KeyEvent e) {}
+    @Override public void keyReleased(KeyEvent e) {}
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        char c = e.getKeyChar();
+        if (Character.isDigit(c) || "+-*/.^".indexOf(c) >= 0) {
+            expression.append(c);
+            expressionField.setText(expression.toString());
+        } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+            evaluate();
+        } else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+            if (expression.length() > 0) {
+                expression.deleteCharAt(expression.length() - 1);
+                expressionField.setText(expression.toString());
+            }
+        } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            expression.setLength(0);
+            expressionField.setText("");
+            resultField.setText("");
+        } else if (c == 'r' || c == 'R') {
+            try {
+                double value = Double.parseDouble(expression.toString());
+                double result = Math.sqrt(value);
+                resultField.setText(String.valueOf(result));
+                expression.setLength(0);
+                expression.append(result);
+                expressionField.setText(expression.toString());
+            } catch (Exception ex) {
+                resultField.setText("Error");
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(CalculatorGUI::new);
     }
 }
