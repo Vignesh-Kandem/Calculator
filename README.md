@@ -1,34 +1,29 @@
-# 🧮 Java Calculator
+# 🧮 Smart Calculator
 
-A simple yet functional calculator built using Java Swing. It supports basic arithmetic operations along with extended functions such as percentage, power, square root, and decimal point calculations. The GUI provides a clean two-field layout for entering expressions and displaying results.
+A fully-featured **Java-based GUI Calculator** built using **Swing**. This smart calculator supports both **light** and **dark themes**, keyboard input, mathematical operations including square root and power, and a sleek, responsive UI with round buttons and stylish fonts.
 
----
-
-## 🚀 Features
+## ✨ Features
 
 - ✅ Basic arithmetic operations: `+`, `-`, `*`, `/`
-- ✅ Additional operations: `^` (power), `%` (modulo), `√` (square root), `.`
-- ✅ Two-display layout:
-  - **Expression Field** – to view full input like `12 + 5 ^ 2`
-  - **Result Field** – displays the final result
-- ✅ Error handling for divide-by-zero and invalid inputs
-- ✅ Responsive button grid using `GridLayout`
+- 🧮 Advanced functions: Square root `√`, Power `^`, Percent `%`
+- 💡 Light & 🌙 Dark themes with a simple dropdown toggle
+- ⌨️ Keyboard input support (Enter, Backspace, ESC, etc.)
+- 🔵 Rounded buttons and monospaced digit display
+- 📱 Responsive and modern-looking UI using Java Swing
 
----
+## 🛠️ Technologies Used
 
-## 🛠️ How to Run
+| Technology     | Description                                |
+|----------------|--------------------------------------------|
+| Java           | Core programming language (Java 17+)       |
+| Swing (`javax.swing`) | GUI library for building desktop apps |
+| AWT (`java.awt`)      | Used for advanced component styling   |
+| OOP Principles | Clean object-oriented design architecture  |
 
-### Prerequisites:
-- Java JDK 8 or later
-- Any IDE (like IntelliJ, Eclipse, VSCode) or Command Line
-
----
-
-## 📦 Installation
+## 🚀 How to Run
 
 Clone this repository:
-
-```bash
-git clone https://github.com/Vignesh-Kandem/Calculator
-cd Calculator
-```
+   ```bash
+   git clone https://github.com/Vignesh-Kandem/SmartCalculator.git
+   cd SmartCalculator
+   ```
