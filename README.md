@@ -1,4 +1,4 @@
-# 🧮 Smart Calculator
+   # 🧮 Smart Calculator
 
 A fully-featured **Java-based GUI Calculator** built using **Swing**. This smart calculator supports both **light** and **dark themes**, keyboard input, mathematical operations including square root and power, and a sleek, responsive UI with round buttons and stylish fonts.
 

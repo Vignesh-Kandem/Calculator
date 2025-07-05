@@ -1,4 +1,3 @@
-// SmartCalculator.java - Final UI with Times New Roman Font Everywhere
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -116,7 +115,11 @@ public class SmartCalculator extends JFrame implements ActionListener, KeyListen
         String cmd = e.getActionCommand();
         switch (cmd) {
             case "=" -> evaluate();
-            case "C" -> { expression.setLength(0); expressionField.setText(""); resultField.setText(""); }
+            case "C" -> {
+                expression.setLength(0);
+                expressionField.setText("");
+                resultField.setText("");
+            }
             case "DEL" -> {
                 if (expression.length() > 0) {
                     expression.deleteCharAt(expression.length() - 1);
@@ -131,12 +134,25 @@ public class SmartCalculator extends JFrame implements ActionListener, KeyListen
                     expression.setLength(0);
                     expression.append(result);
                     expressionField.setText(expression.toString());
-                } catch (Exception ex) { resultField.setText("Error"); }
+                } catch (Exception ex) {
+                    resultField.setText("Error");
+                }
             }
-            case "%" -> { expression.append("/100"); expressionField.setText(expression.toString()); }
-            case "^" -> { expression.append("^"); expressionField.setText(expression.toString()); }
-            default -> { expression.append(cmd); expressionField.setText(expression.toString()); }
+            case "%" -> {
+                expression.append("/100");
+                expressionField.setText(expression.toString());
+            }
+            case "^" -> {
+                expression.append("^");
+                expressionField.setText(expression.toString());
+            }
+            default -> {
+                expression.append(cmd);
+                expressionField.setText(expression.toString());
+            }
         }
+
+        requestFocusInWindow();
     }
 
     void evaluate() {
@@ -154,17 +170,27 @@ public class SmartCalculator extends JFrame implements ActionListener, KeyListen
     public double eval(String expr) {
         return new Object() {
             int pos = -1, ch;
-            void nextChar() { ch = (++pos < expr.length()) ? expr.charAt(pos) : -1; }
+
+            void nextChar() {
+                ch = (++pos < expr.length()) ? expr.charAt(pos) : -1;
+            }
+
             boolean eat(int charToEat) {
                 while (ch == ' ') nextChar();
-                if (ch == charToEat) { nextChar(); return true; }
+                if (ch == charToEat) {
+                    nextChar();
+                    return true;
+                }
                 return false;
             }
+
             double parse() {
-                nextChar(); double x = parseExpression();
+                nextChar();
+                double x = parseExpression();
                 if (pos < expr.length()) throw new RuntimeException("Unexpected: " + (char) ch);
                 return x;
             }
+
             double parseExpression() {
                 double x = parseTerm();
                 while (true) {
@@ -173,6 +199,7 @@ public class SmartCalculator extends JFrame implements ActionListener, KeyListen
                     else return x;
                 }
             }
+
             double parseTerm() {
                 double x = parseFactor();
                 while (true) {
@@ -181,15 +208,24 @@ public class SmartCalculator extends JFrame implements ActionListener, KeyListen
                     else return x;
                 }
             }
+
             double parseFactor() {
                 if (eat('+')) return parseFactor();
                 if (eat('-')) return -parseFactor();
-                double x; int startPos = this.pos;
-                if (eat('(')) { x = parseExpression(); eat(')'); }
-                else if ((ch >= '0' && ch <= '9') || ch == '.') {
+
+                double x;
+                int startPos = this.pos;
+
+                if (eat('(')) {
+                    x = parseExpression();
+                    eat(')');
+                } else if ((ch >= '0' && ch <= '9') || ch == '.') {
                     while ((ch >= '0' && ch <= '9') || ch == '.') nextChar();
                     x = Double.parseDouble(expr.substring(startPos, this.pos));
-                } else throw new RuntimeException("Unexpected: " + (char) ch);
+                } else {
+                    throw new RuntimeException("Unexpected: " + (char) ch);
+                }
+
                 if (eat('^')) x = Math.pow(x, parseFactor());
                 return x;
             }
@@ -198,6 +234,7 @@ public class SmartCalculator extends JFrame implements ActionListener, KeyListen
 
     @Override public void keyTyped(KeyEvent e) {}
     @Override public void keyReleased(KeyEvent e) {}
+
     @Override
     public void keyPressed(KeyEvent e) {
         char c = e.getKeyChar();
