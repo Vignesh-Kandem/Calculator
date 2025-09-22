@@ -22,8 +22,4 @@ A fully-featured **Java-based GUI Calculator** built using **Swing**. This smart
 
 ## 🚀 How to Run
 
-Clone this repository:
-   ```bash
-   git clone https://github.com/Vignesh-Kandem/SmartCalculator.git
-   cd SmartCalculator
-   ```
+
