@@ -22,4 +22,5 @@ A fully-featured **Java-based GUI Calculator** built using **Swing**. This smart
 
 ## 🚀 How to Run
 
+You can download it into your machine, just click the [Download Demo](https://github.com/Vignesh-Kandem/Calculator/releases/download/v1.0/SmartCalculator.jar) and use the calculator application..!
 
